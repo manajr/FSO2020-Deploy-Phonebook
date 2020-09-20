@@ -1,9 +1,27 @@
+//Importing
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+//Initialize express
+const app = express()
 
 morgan('tiny')
 
+//Mongoose Connection
+const url = `mongodb+srv://fullstack-2020-phonebook:${password}@cluster0
+.j5mne.mongodb.net/phonebook-app?retryWrites=true&w=majority`
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+
+//Mongoose Schema definition
+const personSchema = new mongoose.Schema({
+	name: String,
+	number: String 
+});
+const Persona = mongoose.model('Persona', personSchema);
+
+//Morgan Logging composition
 const logging = morgan((tokens,req, res) => {
     return [
         tokens.method(req, res),
@@ -14,8 +32,7 @@ const logging = morgan((tokens,req, res) => {
     ].join(' ')
 })
 
-const app = express()
-
+//Hardcoded persons - TODO: Delete this after do git push
 let persons =  [
     {
         id: 1,
@@ -39,19 +56,23 @@ let persons =  [
     }
 ]
 
+//App configurations
 app.use(express.json())
 app.use(logging)
 app.use(cors())
 app.use(express.static('build'))
 
+//Root backend page configuration
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
 })
 
+//Api person importing hardcoded persons
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
+//API post configuration
 app.post('/api/persons', (request, response) => {
     const randId = Math.floor(Math.random()*1000)
     const person = request.body
@@ -75,6 +96,7 @@ app.post('/api/persons', (request, response) => {
     }
 })
 
+//API configuration for selecting individual person by their ID
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
@@ -87,12 +109,14 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
+//Backend Info page
 app.get('/info', (request, response) => {
     const date = new Date()
     response.send(`<p>Phonebook has info for ${persons.length} people</p>
     <p>${date}</p>`)
 })
 
+//API delete person by their ID
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
@@ -100,6 +124,7 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+//Dealing with the CORS problem
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
