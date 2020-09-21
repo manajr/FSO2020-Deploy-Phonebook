@@ -1,6 +1,7 @@
 //Importing
 const mongoose = require('mongoose')
 
+mongoose.set('useFindAndModify', false)
 //Defining URL to acces MongoDB Atlas Database
 const url = process.env.MONGODB_URI
 
