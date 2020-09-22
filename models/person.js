@@ -1,7 +1,10 @@
 //Importing
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
+
 //Defining URL to acces MongoDB Atlas Database
 const url = process.env.MONGODB_URI
 
@@ -20,9 +23,11 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}).catch(e
 
 //Mongoose Schema definition
 const personSchema = new mongoose.Schema({
-	name: String,
-	number: String 
+	name: {type: String, unique: true},
+	number: {type: String, minlength: 8} 
 });
+
+personSchema.plugin(uniqueValidator)
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
