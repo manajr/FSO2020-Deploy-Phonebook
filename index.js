@@ -94,7 +94,7 @@ app.get('/info', (request, response) => {
 Delete operation on mongodb are with a large delay, and the CSS just
 is delayed as well.
 */
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     //const id = Number(request.params.id)
     //persons = persons.filter(person => person.id !== id)
     Persona.findByIdAndRemove(request.params.id)
