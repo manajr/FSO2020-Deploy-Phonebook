@@ -10,7 +10,8 @@
     "build:ui": "rm -rf build && cd ~/Projetos/Full-Stack-Open-2020/part2/phonebook && npm run build --prod && cp -r build ~/Projetos/FSO2020-Deploy-Phonebook",
     "deploy": "git push heroku-app",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+	"lint": "eslint ."
   },
   "author": "Manassés Jr",
   "license": "MIT",
@@ -23,6 +24,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.9.0",
     "nodemon": "^2.0.4"
   },
   "repository": {
